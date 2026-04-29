@@ -350,6 +350,11 @@ NCR alerting is a natural extension of the same pipeline, running as a final ste
 **Requirements:** Python 3.10+, dbt-core, dbt-sqlite
 
 ```bash
+git clone https://github.com/alexandra-source9476/qualifyze-pipeline.git
+cd qualifyze-pipeline
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 python run_pipeline.py --source eudragmdp --file data/raw/searchGMPCExport_5451317683799439071.xls
 ```
