@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: bronze_eudragmdp
+    description: "Validated, typed rows from raw_eudragmdp (current batch)."
+    columns:
+      - name: eudragmdp_doc_ref
+        description: >
+          EudraGMDP document reference number. NOT enforced unique at the
+          bronze layer, because bronze is append-only and may contain the
+          same doc_ref across multiple ingestions. The "no duplicates within
+          a single batch" invariant is enforced via the singular test
+          `bronze_eudragmdp_no_duplicate_in_current_batch`.
+        data_tests:
+          - not_null
+      - name: oms_location_id
+        data_tests:
+          - not_null
+      - name: site_name
+        data_tests:
+          - not_null
+      - name: country
+        data_tests:
+          - not_null
+      - name: document_type
+        data_tests:
+          - not_null
+
+  - name: bronze_rejected
+    description: >
+      Provider-agnostic rejected rows. Common columns: source,
+      ingestion_batch_id, raw_row (JSON), rejection_reason, rejected_at.
+    columns:
+      - name: source
+        data_tests:
+          - not_null
+      - name: ingestion_batch_id
+        data_tests:
+          - not_null
+      - name: raw_row
+        data_tests:
+          - not_null
+      - name: rejection_reason
+        data_tests:
+          - not_null

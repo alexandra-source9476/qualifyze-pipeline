@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: main
+    description: "Raw landing zone for source exports (append-only)."
+    tables:
+      - name: raw_eudragmdp
+        description: "Untransformed rows ingested from upstream source exports."
+        columns:
+          - name: source
+            description: "Logical source name, e.g. 'eudragmdp'."
+            data_tests:
+              - not_null
+          - name: ingestion_batch_id
+            description: "Run identifier (e.g. run_YYYYMMDD_HHMMSS)."
+            data_tests:
+              - not_null

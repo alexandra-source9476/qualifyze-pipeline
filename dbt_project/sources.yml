@@ -1,0 +1,3 @@
+# This file moved to models/sources.yml (dbt >= 1.10 only loads sources from
+# under model-paths). Left here as a placeholder so old paths still resolve;
+# delete it whenever you like.

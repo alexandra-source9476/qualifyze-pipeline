@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: silver_eudragmdp_sites
+    description: "Deduplicated site dimension keyed on oms_location_id."
+    columns:
+      - name: oms_location_id
+        data_tests:
+          - not_null
+          - unique
+      - name: site_name
+        data_tests:
+          - not_null
+
+  - name: silver_compliance_documents
+    description: "Deduplicated compliance document fact, common cross-source schema."
+    columns:
+      - name: source_document_id
+        data_tests:
+          - not_null
+          - unique
+      - name: document_type
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['GMPC', 'GMPNC']
+              config:
+                severity: warn

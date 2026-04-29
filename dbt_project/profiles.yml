@@ -1,0 +1,14 @@
+qualifyze:
+  target: dev
+  outputs:
+    dev:
+      type: sqlite
+      threads: 1
+      database: qualifyze
+      schema: main
+      schemas_and_paths:
+        # Absolute path injected by run_pipeline.py; falls back to a path
+        # relative to the project root for ad-hoc `dbt run` / `dbt test`
+        # invocations launched from qualifyze_pipeline/.
+        main: "{{ env_var('QUALIFYZE_DB_PATH', 'data/qualifyze.db') }}"
+      schema_directory: "{{ env_var('QUALIFYZE_SCHEMA_DIR', 'data') }}"

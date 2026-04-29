@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: gold_master_site
+    description: "Mock Qualifyze internal site registry."
+    columns:
+      - name: qualifyze_site_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: gold_site_compliance_view
+    description: >
+      Per-site compliance feed driven from gold_master_site. Every Qualifyze
+      site appears at least once, even with no matched EudraGMDP record;
+      in that case the document columns (source_document_id, document_type,
+      etc.) are NULL.
+    columns:
+      - name: qualifyze_site_id
+        data_tests:
+          - not_null
+      - name: document_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['GMPC', 'GMPNC']
+              config:
+                severity: warn
+                where: "document_type is not null"
+
+  - name: gold_ncr_alerts
+    description: "Append-only alerts queue for new GMPNC findings."
+    columns:
+      - name: source_document_id
+        data_tests:
+          - not_null
+          - unique
+      - name: notification_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['pending', 'sent', 'failed']
+              config:
+                severity: warn
