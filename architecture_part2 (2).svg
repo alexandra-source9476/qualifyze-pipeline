@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" viewBox="0 0 780 900">
+<defs>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+<style>
+  text { font-family: Arial, sans-serif; fill: #1a1a1a; }
+  .title { font-size: 14px; font-weight: 700; }
+  .lh { font-size: 11px; font-weight: 700; }
+  .lt { font-size: 9px; fill: #555; }
+  .bh { font-size: 10px; font-weight: 700; }
+  .bt { font-size: 9px; fill: #222; }
+  .tool { font-size: 8.5px; fill: #555; font-style: italic; }
+</style>
+
+<text class="title" x="390" y="20" text-anchor="middle">NCR Monitoring System — Architecture</text>
+
+<!-- ═══ SOURCE ═══ -->
+<rect x="20" y="32" width="740" height="68" rx="7" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+<text class="lh" x="36" y="49" fill="#444">SOURCE</text>
+<text class="lt" x="36" y="62">No API or RSS feed available · Excel export is the only programmatic access point</text>
+
+<rect x="36" y="68" width="260" height="24" rx="4" fill="#DDD8CC" stroke="#888780" stroke-width="0.5"/>
+<text class="bh" x="166" y="82" text-anchor="middle">EudraGMDP Public Site (EMA)</text>
+
+<rect x="316" y="68" width="260" height="24" rx="4" fill="#DDD8CC" stroke="#888780" stroke-width="0.5" stroke-dasharray="3 2"/>
+<text class="bh" x="446" y="78" text-anchor="middle" fill="#777">EMA API</text>
+<text class="tool" x="446" y="88" text-anchor="middle">future · if EMA introduces programmatic access</text>
+
+<!-- ═══ INGESTION ═══ -->
+<rect x="20" y="114" width="740" height="100" rx="7" fill="#F5F0FA" stroke="#8A62C6" stroke-width="1"/>
+<text class="lh" x="36" y="131" fill="#5B3A9E">INGESTION</text>
+<text class="lt" x="36" y="144">Scheduled every 6 hours · automated download · file storage · pipeline trigger</text>
+
+<rect x="36" y="150" width="220" height="52" rx="4" fill="#D4C4F0" stroke="#8A62C6" stroke-width="0.5"/>
+<text class="bh" x="146" y="165" text-anchor="middle">Playwright Fetch Job</text>
+<text class="bt" x="146" y="179" text-anchor="middle">headless browser · submits search form</text>
+<text class="tool" x="146" y="193" text-anchor="middle">Playwright · Python · Dagster scheduled op</text>
+
+<line x1="256" y1="176" x2="276" y2="176" stroke="#8A62C6" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<rect x="276" y="150" width="220" height="52" rx="4" fill="#D4C4F0" stroke="#8A62C6" stroke-width="0.5"/>
+<text class="bh" x="386" y="165" text-anchor="middle">File Storage</text>
+<text class="bt" x="386" y="179" text-anchor="middle">stores downloaded Excel by date</text>
+<text class="tool" x="386" y="193" text-anchor="middle">AWS S3 · triggers Dagster pipeline asset</text>
+
+<line x1="496" y1="176" x2="516" y2="176" stroke="#8A62C6" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<rect x="516" y="150" width="228" height="52" rx="4" fill="#D4C4F0" stroke="#8A62C6" stroke-width="0.5"/>
+<text class="bh" x="630" y="165" text-anchor="middle">Orchestration</text>
+<text class="bt" x="630" y="179" text-anchor="middle">schedules · monitors · retries on failure</text>
+<text class="tool" x="630" y="193" text-anchor="middle">Dagster · cron schedule · Dagster Cloud</text>
+
+<!-- ═══ PIPELINE ═══ -->
+<rect x="20" y="228" width="740" height="82" rx="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+<text class="lh" x="36" y="245" fill="#0F6E56">PIPELINE — Part 1 (reused unchanged)</text>
+<text class="lt" x="36" y="258">Same pipeline as Part 1 · triggered by new file in S3 · no modifications needed</text>
+
+<rect x="36" y="264" width="154" height="34" rx="4" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+<text class="bh" x="113" y="277" text-anchor="middle">raw_eudragmdp</text>
+<text class="tool" x="113" y="290" text-anchor="middle">Python · SQLite/PostgreSQL</text>
+
+<line x1="190" y1="281" x2="208" y2="281" stroke="#1D9E75" stroke-width="1" marker-end="url(#arr)"/>
+
+<rect x="208" y="264" width="154" height="34" rx="4" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+<text class="bh" x="285" y="277" text-anchor="middle">bronze_eudragmdp</text>
+<text class="tool" x="285" y="290" text-anchor="middle">dbt · PostgreSQL</text>
+
+<line x1="362" y1="281" x2="380" y2="281" stroke="#1D9E75" stroke-width="1" marker-end="url(#arr)"/>
+
+<rect x="380" y="264" width="180" height="34" rx="4" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+<text class="bh" x="470" y="277" text-anchor="middle">silver_compliance_docs</text>
+<text class="tool" x="470" y="290" text-anchor="middle">dbt · PostgreSQL · dbt tests</text>
+
+<line x1="560" y1="281" x2="578" y2="281" stroke="#1D9E75" stroke-width="1" marker-end="url(#arr)"/>
+
+<rect x="578" y="264" width="166" height="34" rx="4" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+<text class="bh" x="661" y="277" text-anchor="middle">gold_compliance_view</text>
+<text class="tool" x="661" y="290" text-anchor="middle">dbt · PostgreSQL</text>
+
+<!-- ═══ EVENT DETECTION ═══ -->
+<rect x="20" y="324" width="740" height="110" rx="7" fill="#E0F7F4" stroke="#0B8A72" stroke-width="1"/>
+<text class="lh" x="36" y="341" fill="#065C4C">EVENT DETECTION — new in Part 2</text>
+<text class="lt" x="36" y="354">runs after every pipeline completion · appends events · never deletes</text>
+
+<rect x="36" y="360" width="220" height="62" rx="4" fill="#A8EDE5" stroke="#0B8A72" stroke-width="0.5"/>
+<text class="bh" x="146" y="375" text-anchor="middle">Change Detection Job</text>
+<text class="bt" x="146" y="389" text-anchor="middle">compares silver vs previous run</text>
+<text class="bt" x="146" y="401" text-anchor="middle">inserts ncr_detected / ncr_resolved</text>
+<text class="tool" x="146" y="414" text-anchor="middle">Python · Dagster op · PostgreSQL</text>
+
+<line x1="256" y1="391" x2="276" y2="391" stroke="#0B8A72" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<rect x="276" y="360" width="220" height="62" rx="4" fill="#A8EDE5" stroke="#0B8A72" stroke-width="0.5"/>
+<text class="bh" x="386" y="375" text-anchor="middle">ncr_events</text>
+<text class="bt" x="386" y="389" text-anchor="middle">append-only · full history per site</text>
+<text class="bt" x="386" y="401" text-anchor="middle">ncr_detected / ncr_resolved events</text>
+<text class="tool" x="386" y="414" text-anchor="middle">PostgreSQL · append-only table</text>
+
+<line x1="496" y1="391" x2="516" y2="391" stroke="#0B8A72" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<rect x="516" y="360" width="228" height="62" rx="4" fill="#A8EDE5" stroke="#0B8A72" stroke-width="0.5"/>
+<text class="bh" x="630" y="375" text-anchor="middle">ncr_current_status</text>
+<text class="bt" x="630" y="389" text-anchor="middle">rebuilt each run · compliance score</text>
+<text class="bt" x="630" y="401" text-anchor="middle">total NCRs · avg resolution days</text>
+<text class="tool" x="630" y="414" text-anchor="middle">dbt model · PostgreSQL</text>
+
+<!-- ═══ NOTIFICATION ═══ -->
+<rect x="20" y="448" width="740" height="110" rx="7" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+<text class="lh" x="36" y="465" fill="#854F0B">NOTIFICATION — triggered by ncr_detected and ncr_resolved events</text>
+<text class="lt" x="36" y="478">Q team always first · then clients · every notification logged in ncr_notifications</text>
+
+<rect x="36" y="484" width="168" height="62" rx="4" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="bh" x="120" y="499" text-anchor="middle">Internal Alert</text>
+<text class="bt" x="120" y="513" text-anchor="middle">email to Q team</text>
+<text class="bt" x="120" y="525" text-anchor="middle">monitoring dashboard</text>
+<text class="tool" x="120" y="538" text-anchor="middle">AWS SES · Datadog · Grafana</text>
+
+<rect x="218" y="484" width="168" height="62" rx="4" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="bh" x="302" y="499" text-anchor="middle">Client Notification</text>
+<text class="bt" x="302" y="513" text-anchor="middle">email per affected client</text>
+<text class="bt" x="302" y="525" text-anchor="middle">push to mobile app</text>
+<text class="tool" x="302" y="538" text-anchor="middle">AWS SES · Firebase FCM</text>
+
+<rect x="400" y="484" width="168" height="62" rx="4" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="bh" x="484" y="499" text-anchor="middle">Rotation Task</text>
+<text class="bt" x="484" y="513" text-anchor="middle">auto-created on NCR event</text>
+<text class="bt" x="484" y="525" text-anchor="middle">assigned to on-call person</text>
+<text class="tool" x="484" y="538" text-anchor="middle">Jira API · Asana API · Python</text>
+
+<rect x="582" y="484" width="162" height="62" rx="4" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="bh" x="663" y="499" text-anchor="middle">ncr_notifications</text>
+<text class="bt" x="663" y="513" text-anchor="middle">logs all alerts sent</text>
+<text class="bt" x="663" y="525" text-anchor="middle">SLA gap tracking</text>
+<text class="tool" x="663" y="538" text-anchor="middle">PostgreSQL · append-only</text>
+
+<!-- ═══ INTELLIGENCE ═══ -->
+<rect x="20" y="572" width="740" height="110" rx="7" fill="#E6F1FB" stroke="#378ADD" stroke-width="1"/>
+<text class="lh" x="36" y="589" fill="#185FA5">INTELLIGENCE — runs alongside notification</text>
+<text class="lt" x="36" y="602">triggered by ncr_detected · geo-risk on schedule · ML is future capability</text>
+
+<rect x="36" y="608" width="220" height="62" rx="4" fill="#B5D4F4" stroke="#378ADD" stroke-width="0.5"/>
+<text class="bh" x="146" y="623" text-anchor="middle">Supplier Recommendation</text>
+<text class="bt" x="146" y="637" text-anchor="middle">active GMPC · no NCR last 12m</text>
+<text class="bt" x="146" y="649" text-anchor="middle">ranked by compliance score</text>
+<text class="tool" x="146" y="662" text-anchor="middle">Python · dbt scoring model · PostgreSQL</text>
+
+<rect x="276" y="608" width="220" height="62" rx="4" fill="#B5D4F4" stroke="#378ADD" stroke-width="0.5"/>
+<text class="bh" x="386" y="623" text-anchor="middle">Supply Chain Propagation</text>
+<text class="bt" x="386" y="637" text-anchor="middle">detects indirect NCR impact</text>
+<text class="bt" x="386" y="649" text-anchor="middle">alerts downstream clients</text>
+<text class="tool" x="386" y="662" text-anchor="middle">Python · site_relationships table · PostgreSQL</text>
+
+<rect x="516" y="608" width="228" height="62" rx="4" fill="#B5D4F4" stroke="#378ADD" stroke-width="0.5"/>
+<text class="bh" x="630" y="623" text-anchor="middle">Geo-Risk Detection</text>
+<text class="bt" x="630" y="637" text-anchor="middle">3+ NCRs same country in 30 days</text>
+<text class="bt" x="630" y="649" text-anchor="middle">internal Q team alert only</text>
+<text class="tool" x="630" y="662" text-anchor="middle">dbt model / SQL · Dagster schedule · AWS SES</text>
+
+<!-- ═══ CLIENT PLATFORM ═══ -->
+<rect x="20" y="696" width="740" height="110" rx="7" fill="#EEF0FE" stroke="#3D4DB5" stroke-width="1"/>
+<text class="lh" x="36" y="713" fill="#26215C">CLIENT PLATFORM — Qualifyze App</text>
+<text class="lt" x="36" y="726">live alerts · compliance history · supplier comparison · ML risk score (future)</text>
+
+<rect x="36" y="732" width="220" height="62" rx="4" fill="#C8C4F5" stroke="#3D4DB5" stroke-width="0.5"/>
+<text class="bh" x="146" y="747" text-anchor="middle">Alert Dashboard</text>
+<text class="bt" x="146" y="761" text-anchor="middle">live NCR alerts · SLA tracking</text>
+<text class="bt" x="146" y="773" text-anchor="middle">resolution history timeline</text>
+<text class="tool" x="146" y="786" text-anchor="middle">React/Next.js · REST API · WebSockets</text>
+
+<rect x="276" y="732" width="220" height="62" rx="4" fill="#C8C4F5" stroke="#3D4DB5" stroke-width="0.5"/>
+<text class="bh" x="386" y="747" text-anchor="middle">Supplier Comparison</text>
+<text class="bt" x="386" y="761" text-anchor="middle">side-by-side alternatives</text>
+<text class="bt" x="386" y="773" text-anchor="middle">scope · location · compliance score</text>
+<text class="tool" x="386" y="786" text-anchor="middle">React/Next.js · FastAPI · PostgreSQL</text>
+
+<rect x="516" y="732" width="228" height="62" rx="4" fill="#C8C4F5" stroke="#3D4DB5" stroke-width="0.5" stroke-dasharray="3 2"/>
+<text class="bh" x="630" y="747" text-anchor="middle">ML Risk Score (future)</text>
+<text class="bt" x="630" y="761" text-anchor="middle">NCR probability next 6 months</text>
+<text class="bt" x="630" y="773" text-anchor="middle">trained on ncr_events history</text>
+<text class="tool" x="630" y="786" text-anchor="middle">scikit-learn · MLflow · FastAPI · PostgreSQL</text>
+
+<!-- LAYER ARROWS -->
+<line x1="390" y1="100" x2="390" y2="112" stroke="#666" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="390" y1="214" x2="390" y2="226" stroke="#666" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="390" y1="310" x2="390" y2="322" stroke="#666" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="390" y1="434" x2="390" y2="446" stroke="#666" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="390" y1="558" x2="390" y2="570" stroke="#666" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="390" y1="682" x2="390" y2="694" stroke="#666" stroke-width="1.2" marker-end="url(#arr)"/>
+</svg>
