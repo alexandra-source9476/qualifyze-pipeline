@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" viewBox="0 0 680 860">
+<defs>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+<marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+<marker id="arr-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+<style>
+  text { font-family: Arial, sans-serif; fill: #1a1a1a; }
+  .th { font-size: 13px; font-weight: 600; }
+  .ts { font-size: 11px; fill: #444; }
+  .ll { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; }
+  .badge { font-size: 10px; font-weight: 600; }
+</style>
+
+<!-- SOURCE -->
+<rect x="190" y="12" width="300" height="48" rx="8" fill="#F1EFE8" stroke="#888780" stroke-width="0.8"/>
+<text class="th" x="340" y="30" text-anchor="middle" dominant-baseline="central">EudraGMDP Excel export</text>
+<text class="ts" x="340" y="48" text-anchor="middle" dominant-baseline="central">local file · header at row 5 · fetch_source() stub</text>
+
+<line x1="340" y1="60" x2="340" y2="88" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="ts" x="356" y="76" dominant-baseline="central" fill="#888">Python: generate batch_id · append rows</text>
+
+<!-- RAW LAYER -->
+<rect x="40" y="88" width="600" height="80" rx="8" fill="#F5F0FA" stroke="#8A62C6" stroke-width="0.8"/>
+<text class="ll" x="58" y="104" fill="#5B3A9E">RAW</text>
+<rect x="58" y="112" width="564" height="44" rx="6" fill="#D4C4F0" stroke="#8A62C6" stroke-width="0.5"/>
+<text class="th" x="240" y="128" text-anchor="middle" dominant-baseline="central" fill="#2D1A5E">raw_eudragmdp</text>
+<text class="ts" x="240" y="146" text-anchor="middle" dominant-baseline="central" fill="#5B3A9E">append-only · full history · +ingestion_batch_id · source of truth · dates as TEXT</text>
+<!-- append-only badge -->
+<rect x="480" y="118" width="128" height="22" rx="4" fill="#8A62C6"/>
+<text class="badge" x="544" y="133" text-anchor="middle" fill="white">APPEND-ONLY</text>
+
+<line x1="228" y1="168" x2="228" y2="196" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="ts" x="244" y="184" dominant-baseline="central" fill="#888">dbt run --vars batch_id · filter current batch only</text>
+
+<!-- BRONZE LAYER -->
+<rect x="40" y="196" width="600" height="110" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.8"/>
+<text class="ll" x="58" y="212" fill="#0F6E56">BRONZE</text>
+
+<rect x="58" y="220" width="248" height="74" rx="6" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+<text class="th" x="182" y="238" text-anchor="middle" dominant-baseline="central" fill="#085041">bronze_eudragmdp</text>
+<text class="ts" x="182" y="256" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">cast types · validate · +ingestion_batch_id</text>
+<text class="ts" x="182" y="272" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">+ingested_at · append-only</text>
+<rect x="100" y="280" width="112" height="20" rx="4" fill="#1D9E75"/>
+<text class="badge" x="156" y="294" text-anchor="middle" fill="white">APPEND-ONLY</text>
+
+<rect x="374" y="220" width="248" height="74" rx="6" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.5"/>
+<text class="th" x="498" y="238" text-anchor="middle" dominant-baseline="central" fill="#4A1B0C">bronze_rejected</text>
+<text class="ts" x="498" y="256" text-anchor="middle" dominant-baseline="central" fill="#993C1D">missing required fields</text>
+<text class="ts" x="498" y="272" text-anchor="middle" dominant-baseline="central" fill="#993C1D">+ingestion_batch_id · append-only</text>
+<rect x="416" y="280" width="112" height="20" rx="4" fill="#D85A30"/>
+<text class="badge" x="472" y="294" text-anchor="middle" fill="white">APPEND-ONLY</text>
+
+<line x1="308" y1="257" x2="372" y2="257" stroke="#D85A30" stroke-width="1.2" marker-end="url(#arr-red)"/>
+
+<line x1="182" y1="306" x2="182" y2="334" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="ts" x="198" y="322" dominant-baseline="central" fill="#888">dbt models · reads ALL bronze history</text>
+
+<!-- SILVER LAYER -->
+<rect x="40" y="334" width="600" height="128" rx="8" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.8"/>
+<text class="ll" x="58" y="350" fill="#185FA5">SILVER</text>
+<text class="ts" x="340" y="350" text-anchor="middle" fill="#185FA5">rebuild each run · deduplicate · complete picture across all runs</text>
+
+<rect x="58" y="358" width="248" height="92" rx="6" fill="#B5D4F4" stroke="#378ADD" stroke-width="0.5"/>
+<text class="th" x="182" y="376" text-anchor="middle" dominant-baseline="central" fill="#042C53">silver_eudragmdp_sites</text>
+<text class="ts" x="182" y="394" text-anchor="middle" dominant-baseline="central" fill="#185FA5">deduplicated on oms_location_id</text>
+<text class="ts" x="182" y="410" text-anchor="middle" dominant-baseline="central" fill="#185FA5">one row per site · max last_updated_date</text>
+<text class="ts" x="182" y="426" text-anchor="middle" dominant-baseline="central" fill="#185FA5">qualifyze_site_id · match_confidence</text>
+<rect x="100" y="434" width="96" height="20" rx="4" fill="#378ADD"/>
+<text class="badge" x="148" y="448" text-anchor="middle" fill="white">REBUILD</text>
+
+<rect x="374" y="358" width="248" height="92" rx="6" fill="#B5D4F4" stroke="#378ADD" stroke-width="0.5"/>
+<text class="th" x="498" y="371" text-anchor="middle" dominant-baseline="central" fill="#042C53">silver_compliance_documents</text>
+<text class="ts" x="498" y="389" text-anchor="middle" dominant-baseline="central" fill="#185FA5">deduplicated on eudragmdp_doc_ref</text>
+<text class="ts" x="498" y="405" text-anchor="middle" dominant-baseline="central" fill="#185FA5">max last_updated_date per cert</text>
+<text class="ts" x="498" y="421" text-anchor="middle" dominant-baseline="central" fill="#185FA5">all doc types · common schema</text>
+<rect x="416" y="434" width="96" height="20" rx="4" fill="#378ADD"/>
+<text class="badge" x="464" y="448" text-anchor="middle" fill="white">REBUILD</text>
+
+<line x1="280" y1="462" x2="280" y2="500" stroke="#888" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="ts" x="296" y="483" dominant-baseline="central" fill="#888">dbt models</text>
+
+<!-- REF SEED -->
+<rect x="420" y="468" width="208" height="62" rx="6" fill="#FAC775" stroke="#BA7517" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text class="th" x="524" y="486" text-anchor="middle" dominant-baseline="central" fill="#412402">ref_accepted_document_types</text>
+<text class="ts" x="524" y="504" text-anchor="middle" dominant-baseline="central" fill="#854F0B">dbt seed · owned by business team</text>
+<text class="ts" x="524" y="518" text-anchor="middle" dominant-baseline="central" fill="#854F0B">GMPC · GMPNC · future types</text>
+<line x1="500" y1="530" x2="460" y2="558" stroke="#BA7517" stroke-width="1.2" marker-end="url(#arr-amber)"/>
+
+<!-- GOLD LAYER -->
+<rect x="40" y="558" width="600" height="168" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.8"/>
+<text class="ll" x="58" y="574" fill="#854F0B">GOLD</text>
+
+<rect x="58" y="582" width="168" height="68" rx="6" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="th" x="142" y="601" text-anchor="middle" dominant-baseline="central" fill="#412402">gold_master_site</text>
+<text class="ts" x="142" y="619" text-anchor="middle" dominant-baseline="central" fill="#854F0B">canonical entity · mock</text>
+<rect x="84" y="634" width="96" height="20" rx="4" fill="#BA7517"/>
+<text class="badge" x="132" y="648" text-anchor="middle" fill="white">REBUILD</text>
+
+<rect x="244" y="582" width="210" height="68" rx="6" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="th" x="349" y="597" text-anchor="middle" dominant-baseline="central" fill="#412402">gold_site_compliance_view</text>
+<text class="ts" x="349" y="615" text-anchor="middle" dominant-baseline="central" fill="#854F0B">customer-facing · filtered by</text>
+<text class="ts" x="349" y="629" text-anchor="middle" dominant-baseline="central" fill="#854F0B">ref_accepted_document_types</text>
+<rect x="270" y="634" width="96" height="20" rx="4" fill="#BA7517"/>
+<text class="badge" x="318" y="648" text-anchor="middle" fill="white">REBUILD</text>
+
+<rect x="472" y="582" width="148" height="68" rx="6" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+<text class="th" x="546" y="601" text-anchor="middle" dominant-baseline="central" fill="#412402">gold_ncr_alerts</text>
+<text class="ts" x="546" y="619" text-anchor="middle" dominant-baseline="central" fill="#854F0B">GMPNC detection</text>
+<text class="ts" x="546" y="633" text-anchor="middle" dominant-baseline="central" fill="#854F0B">notification tracking</text>
+<rect x="494" y="634" width="128" height="20" rx="4" fill="#1D9E75"/>
+<text class="badge" x="558" y="648" text-anchor="middle" fill="white">APPEND + UPDATE</text>
+
+<!-- monitoring -->
+<rect x="58" y="660" width="564" height="52" rx="6" fill="none" stroke="#888" stroke-width="0.5" stroke-dasharray="3 3"/>
+<text class="ts" x="340" y="676" text-anchor="middle" dominant-baseline="central" fill="#555">Monitoring: silver rows with unrecognised doc type → data curation team review</text>
+<text class="ts" x="340" y="692" text-anchor="middle" dominant-baseline="central" fill="#555">When validated: add to ref seed · rerun gold only · silver and bronze untouched</text>
+
+<!-- MATCHING NOTE -->
+<rect x="40" y="742" width="600" height="100" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="4 2"/>
+<text class="th" x="340" y="762" text-anchor="middle" dominant-baseline="central" fill="#26215C">Matching logic</text>
+<text class="ts" x="340" y="780" text-anchor="middle" dominant-baseline="central" fill="#534AB7">Pass 1 — exact match on oms_location_id → match_confidence: exact</text>
+<text class="ts" x="340" y="796" text-anchor="middle" dominant-baseline="central" fill="#534AB7">Pass 2 — fuzzy match on site_name + country → match_confidence: fuzzy</text>
+<text class="ts" x="340" y="812" text-anchor="middle" dominant-baseline="central" fill="#534AB7">No match → qualifyze_site_id = NULL · match_confidence: unmatched</text>
+<text class="ts" x="340" y="828" text-anchor="middle" dominant-baseline="central" fill="#534AB7">Creating new internal records is out of scope — business decision</text>
+</svg>
